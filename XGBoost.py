@@ -3,8 +3,8 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
-team = "Los Angeles Lakers"
-opponent = "Charlotte Hornets"  # Specify upcoming opponent
+team = "Minnesota Timberwolves"
+opponent = "Oklahoma City Thunder"  # Specify upcoming opponent
 season = "2024-25"
 
 # Load data
@@ -81,10 +81,10 @@ latest_team_rolling = df.iloc[-1][["LAST_5_PTS", "LAST_5_OPP_PTS", "LAST_5_PLUS_
 next_game = pd.DataFrame([{
     **latest_team_stats, **latest_opp_stats, **latest_team_rolling
 }])
-print(next_game)
+#print(next_game)
 # Predict
 predicted_score = model.predict(next_game)
-
+print(predicted_score)
 # Round & display
 predicted_pts = round(predicted_score[0][0])
 predicted_opp_pts = round(predicted_score[0][1])
