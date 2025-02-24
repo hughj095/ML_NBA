@@ -3,11 +3,10 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
-'''
-team = "Minnesota Timberwolves"
-opponent = "Oklahoma City Thunder"  # Specify upcoming opponent
+team = "Charlotte Hornets"
+opponent = "Sacramento Kings"
 season = "2024-25"
-'''
+
 def FUNC_PREDICT(team, opponent, season):
     # Load data
     team_df = pd.read_csv(f"{season}/{team}_games_2024-25.csv")
@@ -48,15 +47,9 @@ def FUNC_PREDICT(team, opponent, season):
     df["LAST_5_PTS"] = df["PTS"].rolling(window=4).mean().shift(1)
     df["LAST_5_OPP_PTS"] = df["OPP_PTS"].rolling(window=4).mean().shift(1)
     df["LAST_5_PLUS_MINUS"] = df["PLUS_MINUS"].rolling(window=4).mean().shift(1)
-    '''
-    # Historical performance vs. opponent
-    df["VS_OPP_PTS"] = df.groupby("MATCHUP")["PTS"].transform(lambda x: x.rolling(window=3).mean().shift(1))
-    df["VS_OPP_PLUS_MINUS"] = df.groupby("MATCHUP")["PLUS_MINUS"].transform(lambda x: x.rolling(window=3).mean().shift(1))
-    '''
 
     # Drop NaN rows caused by rolling averages
-    df.fillna(method="bfill", inplace=True)
-    print(df)
+    df.bfill(inplace=True)
     # Define features and target
     features = [
         "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "OPP_REB", "OPP_AST",
@@ -78,12 +71,11 @@ def FUNC_PREDICT(team, opponent, season):
     # Get last 5 game averages
     latest_team_rolling = df.iloc[-1][["LAST_5_PTS", "LAST_5_OPP_PTS", "LAST_5_PLUS_MINUS"]]
 
-
     # Prepare input for prediction
     next_game = pd.DataFrame([{
         **latest_team_stats, **latest_opp_stats, **latest_team_rolling
     }])
-    print(next_game)
+
     # Predict
     predicted_score = model.predict(next_game)
 
@@ -97,3 +89,5 @@ def FUNC_PREDICT(team, opponent, season):
 
     return predicted_pts, predicted_opp_pts, predicted_plus_minus
 
+predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(team, opponent, season)
+predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(opponent, team, season)
