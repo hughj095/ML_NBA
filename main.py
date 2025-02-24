@@ -2,6 +2,7 @@ import pandas as pd
 from nba_api.stats.endpoints import ScoreboardV2
 from datetime import datetime, timedelta
 from XGBoost import FUNC_PREDICT
+import time
 
 # VARIABLES
 team_data = pd.read_csv('teams.csv')
@@ -9,7 +10,7 @@ season = "2024-25"
 
 # Fetch future game schedule
 future_date = (datetime.today() + timedelta(days=0)).strftime('%Y-%m-%d')
-scoreboard = ScoreboardV2(game_date=future_date, timeout=120)
+scoreboard = ScoreboardV2(game_date=future_date, timeout=30)
 games = scoreboard.get_dict()['resultSets'][0]['rowSet']
 
 # Create a DataFrame for future games
@@ -27,5 +28,6 @@ teams_df = future_games.iloc[:, [6, 3]]
 for i in range(len(teams_df)):
     team = teams_df.iloc[i, 0]
     opponent = teams_df.iloc[i, 1]
+    time.sleep(1)
     predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(team, opponent, season)
     print(f"{team} vs. {opponent}")
