@@ -3,11 +3,11 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
-'''
-team = "Minnesota Timberwolves"
-opponent = "Oklahoma City Thunder"  # Specify upcoming opponent
+
+team = "Charlotte Hornets"
+opponent = "Sacramento Kings"  # Specify upcoming opponent
 season = "2024-25"
-'''
+
 def FUNC_PREDICT(team, opponent, season):
     # Load data
     team_df = pd.read_csv(f"{season}/{team}_games_2024-25.csv")
@@ -55,8 +55,8 @@ def FUNC_PREDICT(team, opponent, season):
     '''
 
     # Drop NaN rows caused by rolling averages
-    df.fillna(method="bfill", inplace=True)
-    print(df)
+    df.bfill(inplace=True)
+    #print(df)
     # Define features and target
     features = [
         "FG_PCT", "FG3_PCT", "FT_PCT", "REB", "AST", "OPP_REB", "OPP_AST",
@@ -83,7 +83,7 @@ def FUNC_PREDICT(team, opponent, season):
     next_game = pd.DataFrame([{
         **latest_team_stats, **latest_opp_stats, **latest_team_rolling
     }])
-    print(next_game)
+    #print(next_game)
     # Predict
     predicted_score = model.predict(next_game)
 
@@ -97,3 +97,5 @@ def FUNC_PREDICT(team, opponent, season):
 
     return predicted_pts, predicted_opp_pts, predicted_plus_minus
 
+predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(team, opponent, season)
+predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(opponent, team, season)

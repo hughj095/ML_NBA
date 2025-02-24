@@ -8,7 +8,7 @@ team_data = pd.read_csv('teams.csv')
 season = "2024-25"
 
 # Fetch future game schedule
-future_date = (datetime.today() + timedelta(days=1)).strftime('%Y-%m-%d')
+future_date = (datetime.today() + timedelta(days=0)).strftime('%Y-%m-%d')
 scoreboard = ScoreboardV2(game_date=future_date, timeout=120)
 games = scoreboard.get_dict()['resultSets'][0]['rowSet']
 
