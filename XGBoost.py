@@ -3,11 +3,11 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 
-'''
-team = "Charlotte Hornets"
-opponent = "Sacramento Kings"
+
+team = "Milwaukee Bucks"
+opponent = "Houston Rockets"
 season = "2024-25"
-'''
+
 def FUNC_PREDICT(team, opponent, season):
     # Load data
     team_df = pd.read_csv(f"{season}/{team}_games_2024-25.csv")
@@ -90,7 +90,6 @@ def FUNC_PREDICT(team, opponent, season):
 
     return predicted_pts, predicted_opp_pts, predicted_plus_minus
 
-'''
+
 predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(team, opponent, season)
 predicted_pts, predicted_opp_pts, predicted_plus_minus = FUNC_PREDICT(opponent, team, season)
-'''
